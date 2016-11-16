@@ -39,6 +39,12 @@ except ImportError:
     print("Cython does not appear to be installed.  Will attempt to use "
           "pre-made cpp file...")
 
+try:
+    from subprocess import DEVNULL # py3k
+except ImportError:
+    import os
+    DEVNULL = open(os.devnull, 'wb')
+
 
 def get_freetype_info():
     """ Use pkg-config to locate the freetype2 library installed on the system.
@@ -48,7 +54,7 @@ def get_freetype_info():
     """
     def run_cmd(cmd, env=None):
         output = subprocess.check_output(cmd, universal_newlines=True, env=env,
-                                         stderr=subprocess.DEVNULL)
+                                         stderr=DEVNULL)
         return output.split()
 
     def collect_data(env=None):
